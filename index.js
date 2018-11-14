@@ -120,7 +120,7 @@ class ElectronViewRenderer {
       const fileName = parseFilePath(request.url)
       const extension = renderer.extension || `.${renderer.name}`
       const filePath = path.join(this.viewPath, `${fileName}${extension}`)
-      const viewData = this._views[parsedUrl.query._view].viewData
+      const viewData = (this._views[parsedUrl.query._view] && this._views[parsedUrl.query._view].viewData) ? this._views[parsedUrl.query._view].viewData : undefined;
 
       renderer.rendererAction(filePath, viewData, (renderedHTML) => {
         resolve({
