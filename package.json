@@ -1,6 +1,6 @@
 {
-  "name": "electron-view-renderer",
-  "version": "1.2.4",
+  "name": "electron-view-renderer-spc",
+  "version": "2.0.0",
   "description": "View rendering engine for electron framework.",
   "main": "./index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/dennisbaskin/electron-view-renderer.git"
+    "url": "git+ssh://git@github.com/SpecmoComptonJames/electron-view-renderer.git"
   },
   "keywords": [
     "electron",
@@ -26,12 +26,8 @@
     "rendering",
     "url"
   ],
-  "author": "Dennis Baskin <dennis@dennisbaskin.com>",
+  "author": "Specmo",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/dennisbaskin/electron-view-renderer/issues"
-  },
-  "homepage": "https://github.com/dennisbaskin/electron-view-renderer#readme",
   "dependencies": {
     "captains-log": "^1.0.2",
     "ejs": "^2.5.6",
