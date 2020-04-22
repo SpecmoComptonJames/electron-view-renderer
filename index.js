@@ -57,7 +57,8 @@ class ElectronViewRenderer {
     viewProtcolName = 'view',
     useAssets = false,
     assetsPath = 'assets',
-    assetsProtocolName = 'asset'
+    assetsProtocolName = 'asset',
+    ignoreExtensions = []
   } = {}) {
     this._renderers = {}
     this._currentRenderer = {}
@@ -70,6 +71,7 @@ class ElectronViewRenderer {
     this._viewPath = viewPath
 
     this._populateDefaultRenderers()
+    this._ingnoreExtensions = ignoreExtensions;
   }
 
  /**
@@ -115,19 +117,43 @@ class ElectronViewRenderer {
 
   renderTemplate(request) {
     return new Promise((resolve, reject) => {
-      const renderer = this.currentRenderer
-      const parsedUrl = url.parse(request.url, true)
-      const fileName = parseFilePath(request.url)
-      const extension = renderer.extension || `.${renderer.name}`
-      const filePath = path.join(this.viewPath, `${fileName}${extension}`)
-      const viewData = (this._views[parsedUrl.query._view] && this._views[parsedUrl.query._view].viewData) ? this._views[parsedUrl.query._view].viewData : undefined;
+      try {
+        const renderer = this.currentRenderer
+        const parsedUrl = url.parse(request.url, true)
+        const fileName = parseFilePath(request.url)
+        const extension = renderer.extension || `.${renderer.name}`
+        const filePath = path.join(this.viewPath, `${fileName}${extension}`)
+        const viewData = (this._views[parsedUrl.query._view] && this._views[parsedUrl.query._view].viewData) ? this._views[parsedUrl.query._view].viewData : undefined;
 
-      renderer.rendererAction(filePath, viewData, (renderedHTML) => {
-        resolve({
-          mimeType: 'text/html',
-          data: new Buffer(renderedHTML),
-        })
-      })
+        //add the ability to ignore extensions ie: map files which were getting pug added to them.
+        //just send back an empty string to make electron happy.
+        if (this._ingnoreExtensions.length > 0) {
+          let foundIgnore = false;
+          this._ingnoreExtensions.some(function (ext) {
+            if (filePath.substr(filePath.length - ext.length) === ext) {
+              resolve({
+                mimeType: 'text/html',
+                data: new Buffer(""),
+              });
+              foundIgnore = true;
+            }
+          });
+
+          if (foundIgnore) {
+            return;
+          }
+
+        }
+        renderer.rendererAction(filePath, viewData, (renderedHTML) => {
+          resolve({
+            mimeType: 'text/html',
+            data: new Buffer(renderedHTML),
+          })
+        });
+
+      } catch(ex) {
+        reject(ex);
+      }
     })
   }
 
