@@ -1,6 +1,6 @@
 {
   "name": "electron-view-renderer-spc",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "View rendering engine for electron framework.",
   "main": "./index.js",
   "scripts": {
